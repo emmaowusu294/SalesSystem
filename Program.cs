@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using SalesSystem.Data;
+using SalesSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//registering product service
+builder.Services.AddScoped<ProductService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
