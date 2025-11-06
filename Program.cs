@@ -10,6 +10,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //registering product service
 builder.Services.AddScoped<ProductService>();
 
+//registering customer service
+builder.Services.AddScoped<CustomerService>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
