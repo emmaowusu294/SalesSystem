@@ -58,7 +58,6 @@ namespace SalesSystem.Services
                 _context.Products.Update(product);
                 _context.SaveChanges();
             }
-
         }
 
         // Get a single product by its ID
