@@ -40,7 +40,9 @@ namespace SalesSystem.Controllers
         public ActionResult Create()
         {
             // We just need to get the customer list for the dropdown
-            var customers = _customerService.GetAllCustomers();
+            var customers = _customerService.GetAllCustomers()
+                    .OrderBy(c => c.Name);
+
             var viewModel = new SaleCreateDraftViewModel
             {
                 CustomerList = new SelectList(customers, "CustomerId", "Name")
@@ -102,7 +104,8 @@ namespace SalesSystem.Controllers
             }
 
             // 2. Create the "Add Item" form's ViewModel
-            var allProducts = _productService.GetAllProducts().Where(p => p.StockQuantity > 0);
+            var allProducts = _productService.GetAllProducts().Where(p => p.StockQuantity > 0)
+                .OrderBy(p => p.Name);
             var addItemViewModel = new SaleAddItemViewModel
             {
                 SaleId = id, // <-- Pre-fill the hidden SaleId

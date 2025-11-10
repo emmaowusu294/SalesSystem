@@ -103,7 +103,9 @@
     <tfoot>
         <tr class="table-group-divider">
             <td colspan="3" class="text-end"><strong>Total (So Far):</strong></td>
-            <td><strong>@Model.Receipt.TotalAmount.ToString("C")</strong></td>
+            <td>
+                <strong>@Model.Receipt.Items.Sum(item => item.LineTotal).ToString("C")</strong>
+            </td>
         </tr>
     </tfoot>
 </table>

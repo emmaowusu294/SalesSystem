@@ -108,7 +108,7 @@ namespace SalesSystem.Services
                     };
                     _context.SaleItems.Add(saleItem);
 
-                    sale.TotalAmount += product.SellingPrice * quantity;
+                    //sale.TotalAmount += product.SellingPrice * quantity;
 
                     // Update the product's stock
                     product.StockQuantity -= quantity;

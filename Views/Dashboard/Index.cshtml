@@ -1,0 +1,137 @@
+﻿@model SalesSystem.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h2">Dashboard</h1>
+    <p>Your "at-a-glance" control room for the sales system.</p>
+
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                @Html.DisplayNameFor(model => model.TotalRevenue)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Html.DisplayFor(model => model.TotalRevenue)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                @Html.DisplayNameFor(model => model.TotalSalesCount)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Html.DisplayFor(model => model.TotalSalesCount)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-receipt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                @Html.DisplayNameFor(model => model.TotalCustomersCount)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Html.DisplayFor(model => model.TotalCustomersCount)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                @Html.DisplayNameFor(model => model.TotalProductsCount)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Html.DisplayFor(model => model.TotalProductsCount)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-box fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Sales</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sale ID</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Payment</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.RecentSales)
+                                {
+                                    <tr>
+                                        <td>#@item.SaleId</td>
+                                        <td>@item.SaleDate.ToString("g")</td>
+                                        <td>@item.CustomerName</td>
+                                        <td>@item.PaymentMethod</td>
+                                        <td>@item.TotalAmount.ToString("C")</td>
+                                        <td>
+                                            <a asp-controller="Sales" asp-action="Details" asp-route-id="@item.SaleId" class="btn btn-info btn-sm">
+                                                View Receipt
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
