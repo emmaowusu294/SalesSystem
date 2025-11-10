@@ -13,6 +13,8 @@ builder.Services.AddScoped<ProductService>();
 //registering customer service
 builder.Services.AddScoped<CustomerService>();
 
+builder.Services.AddScoped<SaleService>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

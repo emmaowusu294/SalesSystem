@@ -1,0 +1,69 @@
+﻿@model IEnumerable<SalesSystem.ViewModels.SaleListViewModel>
+
+@{
+    ViewData["Title"] = "Sales History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Sales History</h1>
+
+@if (ViewBag.Message != null)
+{
+    string alertClass = (ViewBag.Success != null && ViewBag.Success == true) ? "alert-success" : "alert-danger";
+    <div class="alert @alertClass alert-dismissible fade show" role="alert">
+        @ViewBag.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Sale</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaleDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentMethod)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    #@Html.DisplayFor(modelItem => item.SaleId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SaleDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentMethod)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalAmount)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.SaleId" class="btn btn-info btn-sm">View Receipt</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

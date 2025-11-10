@@ -1,4 +1,5 @@
 ﻿using SalesSystem.Data;
+using SalesSystem.Helpers;
 using SalesSystem.Models;
 using SalesSystem.ViewModels;
 
@@ -32,7 +33,7 @@ namespace SalesSystem.Services
         }
 
         // Create a new customer
-        public void CreateCustomer(CustomerViewModel viewModel)
+        public ServiceResponse CreateCustomer(CustomerViewModel viewModel)
         {
             var customer = new Customer
             {
@@ -43,6 +44,11 @@ namespace SalesSystem.Services
 
             _context.Customers.Add(customer);
             _context.SaveChanges();
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = $"Customer '{customer.Name}' added successfully"
+            };
         }
 
 
@@ -67,27 +73,48 @@ namespace SalesSystem.Services
         }
 
         // update a customer information
-        public void UpdateCustomer(CustomerViewModel viewModel) { 
+        public ServiceResponse UpdateCustomer(CustomerViewModel viewModel) { 
             var customer = _context.Customers.Find(viewModel.CustomerId);
 
-            if (customer != null) { 
-                customer.Name = viewModel.Name;
-                customer.PhoneNumber = viewModel.PhoneNumber;
-                customer.Email = viewModel.Email;
-
-                _context.Customers.Update(customer);
-                _context.SaveChanges();
+            if (customer == null) {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "Update Failed.......User doesn't exist"
+                };
             }
+            
+            customer.Name = viewModel.Name;
+            customer.PhoneNumber = viewModel.PhoneNumber;
+            customer.Email = viewModel.Email;
+
+            _context.Customers.Update(customer);
+            _context.SaveChanges();
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = $"Customer '{customer.Name}' updated successfully"
+            };
         }
 
         //delete a customer
-        public void DeleteCustomer(CustomerViewModel viewModel) {
-            var customer = _context.Customers.Find(viewModel.CustomerId);
-            if (customer != null)
+        public ServiceResponse DeleteCustomer(int id) {
+            var customer = _context.Customers.Find(id);
+            if (customer == null)
             {
-                _context.Customers.Remove(customer);
-                _context.SaveChanges();
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "Delete Failed....User doesn't exist"
+                };
             }
+            _context.Customers.Remove(customer);
+            _context.SaveChanges();
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = $"Customer '{customer.Name}' deleted successfully"
+            };
         }
         
     }

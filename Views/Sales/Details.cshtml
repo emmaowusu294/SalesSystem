@@ -1,0 +1,119 @@
+﻿@model SalesSystem.ViewModels.SaleDetailWrapperViewModel
+
+@{
+    ViewData["Title"] = $"Details for Sale #{Model.Receipt.SaleId}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.Message != null)
+{
+    string alertClass = (ViewBag.Success != null && ViewBag.Success == true) ? "alert-success" : "alert-danger";
+    <div class="alert @alertClass alert-dismissible fade show" role="alert">
+        @ViewBag.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-8">
+        <h1>Sale #@Model.Receipt.SaleId (In Progress)</h1>
+    </div>
+    <div class="col-4 text-end">
+        <form asp-action="Finalize" method="post">
+            <input type="hidden" name="saleId" value="@Model.Receipt.SaleId" />
+            <button type="submit" class="btn btn-success btn-lg">Finalize Sale</button>
+        </form>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><strong>Customer</strong></div>
+            <div class="card-body">
+                <h5 class="card-title">@Model.Receipt.CustomerName</h5>
+                <p class="card-text mb-0">@Model.Receipt.CustomerPhone</p>
+                <p class="card-text">@Model.Receipt.CustomerEmail</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><strong>Sale Info</strong></div>
+            <div class="card-body">
+                <p class="card-text mb-0"><strong>Date:</strong> @Model.Receipt.SaleDate.ToString("g")</p>
+                <p class="card-text"><strong>Payment:</strong> @Model.Receipt.PaymentMethod.ToString()</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-4" />
+
+
+<div class="card bg-light mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Add Product to Sale</h5>
+        <form asp-action="AddItem" method="post" class="row row-cols-lg-auto g-3 align-items-end">
+            <input type="hidden" asp-for="AddItemForm.SaleId" />
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="col-12">
+                <label asp-for="AddItemForm.ProductId" class="control-label"></label>
+                <select asp-for="AddItemForm.ProductId" class="form-control" asp-items="Model.AddItemForm.ProductList">
+                    <option value="">-- Select Product --</option>
+                </select>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="AddItemForm.Quantity" class="control-label"></label>
+                <input asp-for="AddItemForm.Quantity" type="number" value="1" min="1" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-secondary">Add Item</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<h3>Items in Sale</h3>
+<table class="table">
+    <thead class="table-light">
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Line Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Receipt.Items)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice.ToString("C")</td>
+                <td>@item.LineTotal.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr class="table-group-divider">
+            <td colspan="3" class="text-end"><strong>Total (So Far):</strong></td>
+            <td><strong>@Model.Receipt.TotalAmount.ToString("C")</strong></td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to Sales History (Cancel)</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

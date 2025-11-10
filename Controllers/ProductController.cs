@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SalesSystem.Services;
-using SalesSystem.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
+using SalesSystem.Helpers; 
+using SalesSystem.Services; 
+using SalesSystem.ViewModels; 
 
 namespace SalesSystem.Controllers
 {
@@ -14,21 +14,27 @@ namespace SalesSystem.Controllers
             _productService = productService;
         }
 
-
-
         // GET: ProductController
         public ActionResult Index()
         {
+            
+            ViewBag.Message = TempData["Message"];
+            ViewBag.Success = TempData["Success"];
+
             var viewModel = _productService.GetAllProducts();
             return View(viewModel);
         }
 
         // GET: ProductController/Details/5
         public ActionResult Details(int id)
-        {   
+        {
             var viewModel = _productService.GetProductById(id);
-            if (viewModel == null) { 
-                return NotFound();
+            if (viewModel == null)
+            {
+               
+                TempData["Message"] = "Product not found.";
+                TempData["Success"] = false;
+                return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
         }
@@ -42,15 +48,27 @@ namespace SalesSystem.Controllers
         // POST: ProductController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ProductViewModel viewModel, IFormCollection collection)
+        public ActionResult Create(ProductViewModel viewModel)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
-                _productService.CreateProduct(viewModel);
+                
+                var response = _productService.CreateProduct(viewModel);
 
+                
+                if (!response.Success)
+                {
+                    
+                    ModelState.AddModelError(string.Empty, response.Message);
+                    return View(viewModel); 
+                }
+
+                TempData["Message"] = response.Message;
+                TempData["Success"] = response.Success;
                 return RedirectToAction(nameof(Index));
             }
 
+            
             return View(viewModel);
         }
 
@@ -58,23 +76,44 @@ namespace SalesSystem.Controllers
         public ActionResult Edit(int id)
         {
             var viewModel = _productService.GetProductById(id);
-            if (viewModel == null) {
-                return NotFound();
+            if (viewModel == null)
+            {
+                TempData["Message"] = "Product not found.";
+                TempData["Success"] = false;
+                return RedirectToAction(nameof(Index));
             }
-
             return View(viewModel);
         }
 
         // POST: ProductController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id,ProductViewModel viewModel ,IFormCollection collection)
+        public ActionResult Edit(int id, ProductViewModel viewModel)
         {
+            if (id != viewModel.ProductId)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                _productService.UpdateProduct(viewModel);
+                
+                var response = _productService.UpdateProduct(viewModel);
+
+                
+                if (!response.Success)
+                {
+                    
+                    ModelState.AddModelError(string.Empty, response.Message);
+                    return View(viewModel); 
+                }
+
+                
+                TempData["Message"] = response.Message;
+                TempData["Success"] = response.Success;
                 return RedirectToAction(nameof(Index));
             }
+
             return View(viewModel);
         }
 
@@ -84,24 +123,26 @@ namespace SalesSystem.Controllers
             var viewModel = _productService.GetProductById(id);
             if (viewModel == null)
             {
-                return NotFound();
+                TempData["Message"] = "Product not found.";
+                TempData["Success"] = false;
+                return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
         }
 
         // POST: ProductController/Delete/5
         [HttpPost]
+        [ActionName("Delete")] 
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
-            if (ModelState.IsValid)
-            {
-                _productService.DeleteProduct(id);
+           
+            var response = _productService.DeleteProduct(id);
 
-                return RedirectToAction(nameof(Index));
+            TempData["Message"] = response.Message;
+            TempData["Success"] = response.Success;
 
-            }
-            return View();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
