@@ -4,6 +4,21 @@
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@if (ViewBag.Message != null)
+{
+    //logic to determine determine if the alert should be green (success) or red (danger)
+    string alertClass = (ViewBag.Success != null && ViewBag.Success == true) ? "alert-success" : "alert-danger";
+
+    // logic for icon
+    string iconName = (ViewBag.Success != null && ViewBag.Success == true) ? "bi-check-circle-fill" : "bi-x-circle-fill";
+
+    <div class="alert @alertClass alert-dismissible fade show" role="alert">
+        <i class="bi @iconName me-2"></i>
+        @ViewBag.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+} else{
 
 <h1>Delete</h1>
 
@@ -38,3 +53,4 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+}
