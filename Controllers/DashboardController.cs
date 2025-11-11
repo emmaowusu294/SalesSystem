@@ -39,6 +39,9 @@ namespace SalesSystem.Controllers
                 TotalCustomersCount = allCustomers.Count(),
                 TotalProductsCount = allProducts.Count(),
 
+                //mostCustomerSales = allSales.Count()
+                //                        .Grou
+
                 // b. The "Recent Activity" List
                 // We'll just show the 5 most recent sales
                 RecentSales = allSales.OrderByDescending(s => s.SaleDate)

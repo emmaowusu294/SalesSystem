@@ -31,10 +31,18 @@ namespace SalesSystem.Controllers
             var viewModel = _productService.GetProductById(id);
             if (viewModel == null)
             {
-               
-                TempData["Message"] = "Product not found.";
-                TempData["Success"] = false;
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Details), new { id = 11 });
+                var dummyViewModel =  new ProductViewModel
+                {
+                    ProductId = 0,
+                    Name = "",
+                    Description = "",
+                    SellingPrice = 0,
+                    StockQuantity = 0,
+                };
+                ViewBag.Message = "Product not found.";
+                ViewBag.Success = false;
+                return View(dummyViewModel);
             }
             return View(viewModel);
         }
@@ -78,9 +86,17 @@ namespace SalesSystem.Controllers
             var viewModel = _productService.GetProductById(id);
             if (viewModel == null)
             {
-                TempData["Message"] = "Product not found.";
-                TempData["Success"] = false;
-                return RedirectToAction(nameof(Index));
+                var dummyViewModel = new ProductViewModel
+                {
+                    ProductId = 0,
+                    Name = "",
+                    Description = "",
+                    SellingPrice = 0,
+                    StockQuantity = 0,
+                };
+                ViewBag.Message = "Product not found.";
+                ViewBag.Success = false;
+                return View(dummyViewModel);
             }
             return View(viewModel);
         }
@@ -123,9 +139,17 @@ namespace SalesSystem.Controllers
             var viewModel = _productService.GetProductById(id);
             if (viewModel == null)
             {
-                TempData["Message"] = "Product not found.";
-                TempData["Success"] = false;
-                return RedirectToAction(nameof(Index));
+                var dummyViewModel = new ProductViewModel
+                {
+                    ProductId = 0,
+                    Name = "",
+                    Description = "",
+                    SellingPrice = 0,
+                    StockQuantity = 0,
+                };
+                ViewBag.Message = "Product not found.";
+                ViewBag.Success = false;
+                return View(dummyViewModel);
             }
             return View(viewModel);
         }

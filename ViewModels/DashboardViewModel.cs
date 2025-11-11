@@ -22,6 +22,9 @@ namespace SalesSystem.ViewModels
         [Display(Name = "Total Customers")]
         public int TotalCustomersCount { get; set; }
 
+        [Display(Name = "Customer with most sales")]
+        public int mostCustomerSales { get; set; }
+
         [Display(Name = "Total Products")]
         public int TotalProductsCount { get; set; }
 
@@ -34,6 +37,7 @@ namespace SalesSystem.ViewModels
 
         // We'll leave this empty for now, but you could add
         // properties here to hold chart data.
-        // public List<SomeChartData> SalesOverTime { get; set; }
+        // public List<SomeChartData> SalesOverTime { get; set; }``                     
+
     }
 }

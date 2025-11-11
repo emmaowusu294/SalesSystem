@@ -21,9 +21,7 @@ namespace SalesSystem.Controllers
             _productService = productService;
         }
 
-        // ==========================================================
-        // === "SALES HISTORY" PAGE (Unchanged) ===
-        // ==========================================================
+
         // GET: /Sales
         public ActionResult Index()
         {
@@ -33,13 +31,10 @@ namespace SalesSystem.Controllers
             return View(allSales);
         }
 
-        // ==========================================================
-        // === STEP 1 (GET): SHOW THE "CREATE DRAFT" FORM ===
-        // ==========================================================
         // GET: /Sales/Create
         public ActionResult Create()
         {
-            // We just need to get the customer list for the dropdown
+            //  just need to get the customer list for the dropdown
             var customers = _customerService.GetAllCustomers()
                     .OrderBy(c => c.Name);
 
@@ -50,9 +45,7 @@ namespace SalesSystem.Controllers
             return View(viewModel); // Goes to Create.cshtml
         }
 
-        // ==========================================================
-        // === STEP 1 (POST): CREATE THE "DRAFT" SALE ===
-        // ==========================================================
+
         // POST: /Sales/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -60,12 +53,11 @@ namespace SalesSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Call our new, simple service method
+                // Call new, simple service method
                 var response = _saleService.CreateSaleDraft(viewModel.CustomerId, viewModel.PaymentMethod);
 
                 if (response.Success)
                 {
-                    // --- SUCCESS! ---
                     // The "draft" is created. Now redirect to the
                     // "Add Items" (Details) page for this new Sale.
                     return RedirectToAction(nameof(Details), new { id = response.Data.SaleId });
@@ -77,15 +69,14 @@ namespace SalesSystem.Controllers
                 }
             }
 
-            // If we're here, the form was invalid. Re-populate the dropdown.
-            var customers = _customerService.GetAllCustomers();
+            // the form was invalid. Re-populate the dropdown.
+            var customers = _customerService.GetAllCustomers()
+                    .OrderBy(c => c.Name);
             viewModel.CustomerList = new SelectList(customers, "CustomerId", "Name");
             return View(viewModel);
         }
 
-        // ==========================================================
-        // === STEP 2 (GET): THE "ADD ITEMS" HUB PAGE ===
-        // ==========================================================
+        // add items page
         // GET: /Sales/Details/5
         public ActionResult Details(int id)
         {
@@ -126,10 +117,8 @@ namespace SalesSystem.Controllers
             return View(wrapper); // Goes to Details.cshtml
         }
 
-        // ==========================================================
-        // === STEP 2 (POST): ADD A SINGLE ITEM ===
-        // ==========================================================
-        // This is a *new* action that the "Add Item" form will post to
+      
+        // This is a new action that the "Add Item" form will post to
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddItem(SaleAddItemViewModel AddItemForm)
@@ -148,13 +137,11 @@ namespace SalesSystem.Controllers
                 TempData["Success"] = false;
             }
 
-            // --- ALWAYS redirect back to the "Hub" page ---
+            //redirect back to the same page
             return RedirectToAction(nameof(Details), new { id = AddItemForm.SaleId });
         }
 
-        // ==========================================================
-        // === STEP 3 (POST): FINALIZE THE SALE ===
-        // ==========================================================
+
         // This is a new action for the "Finalize" button
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SalesSystem.Helpers;
+using SalesSystem.Models;
 using SalesSystem.Services;
 using SalesSystem.ViewModels;
 
@@ -21,6 +22,7 @@ namespace SalesSystem.Controllers
             ViewBag.Success = TempData["Success"];
             ViewBag.Message = TempData["Message"];
             var allCustomers = _customerService.GetAllCustomers();
+
             return View(allCustomers);
         }
 
@@ -29,10 +31,19 @@ namespace SalesSystem.Controllers
         {
             var viewModel = _customerService.GetCustomerById(id);
             if (viewModel == null) {
-                TempData["Success"] = false;
-                TempData["Message"] = "Customer doesn't exist";
+                
+                ViewBag.Success = false;
+                ViewBag.Message = "Customer not found";
 
-                return RedirectToAction(nameof(Index));
+                var dummyViewModel = new CustomerViewModel
+                {
+                    CustomerId = 0,
+                    Name = "",
+                    PhoneNumber = "",
+                    Email = "",
+                };
+
+                return View(dummyViewModel);
             }
 
             return View(viewModel);
@@ -72,10 +83,17 @@ namespace SalesSystem.Controllers
         {
             var customer = _customerService.GetCustomerById(id);
             if (customer == null) {
-                TempData["Success"] = false;
-                TempData["Message"] = "Customer not found";
+                ViewBag.Success = false;
+                ViewBag.Message = "Customer not found";
+                var dummyViewModel = new CustomerViewModel
+                {
+                    CustomerId = 0,
+                    Name = "",
+                    PhoneNumber = "",
+                    Email = "",
+                };
 
-                return RedirectToAction(nameof(Index));
+                return View(dummyViewModel);
             }
             return View(customer);
         }
@@ -113,10 +131,17 @@ namespace SalesSystem.Controllers
             var customer = _customerService.GetCustomerById(id);
             if (customer == null)
             {
-                TempData["Success"] = false;
-                TempData["Message"] = "Customer not found";
+                ViewBag.Success = false;
+                ViewBag.Message = "Customer not found";
+                var dummyViewModel = new CustomerViewModel
+                {
+                    CustomerId = 0,
+                    Name = "",
+                    PhoneNumber = "",
+                    Email = "",
+                };
 
-                return RedirectToAction(nameof(Index));
+                return View(dummyViewModel);
             }
             return View(customer);
         }

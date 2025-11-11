@@ -18,16 +18,10 @@ namespace SalesSystem.Services
             _context = context;
         }
 
-        // ==========================================================
-        // === STEP 1: CREATE THE "DRAFT" SALE (THE MASTER) ===
-        // ==========================================================
-        /// <summary>
-        /// Creates a new "draft" Sale record. This is just the master
-        /// record, with no items and a total of 0.
-        /// </summary>
+        /// Creates a new "draft" Sale record. 
         public ServiceResponse<Sale> CreateSaleDraft(int customerId, PaymentMethod paymentMethod)
         {
-            // We use a "ServiceResponse<T>" to return the new Sale object
+            //  "ServiceResponse<T>" to return the new Sale object
 
             // Check if the customer exists
             var customer = _context.Customers.Find(customerId);
@@ -51,22 +45,17 @@ namespace SalesSystem.Services
             _context.Sales.Add(sale);
             _context.SaveChanges();
 
-            // Return a "success" response *with* the new Sale object
+            // Return a "success" response with the new Sale object
             return new ServiceResponse<Sale>
             {
                 Success = true,
                 Message = "Sale draft created successfully.",
-                Data = sale // Return the new Sale (so we can get its ID)
+                Data = sale // Return the new Sale so I can get its ID
             };
         }
 
-        // ==========================================================
-        // === STEP 2: ADD A SINGLE ITEM TO THE SALE ===
-        // ==========================================================
-        /// <summary>
+   
         /// Adds a single product (SaleItem) to an existing Sale.
-        /// This also checks for stock.
-        /// </summary>
         public ServiceResponse AddItemToSale(int saleId, int productId, int quantity)
         {
             // Use a transaction here, because we are
@@ -108,7 +97,7 @@ namespace SalesSystem.Services
                     };
                     _context.SaleItems.Add(saleItem);
 
-                    //sale.TotalAmount += product.SellingPrice * quantity;
+
 
                     // Update the product's stock
                     product.StockQuantity -= quantity;
@@ -126,12 +115,9 @@ namespace SalesSystem.Services
             }
         }
 
-        // ==========================================================
-        // === STEP 3: FINALIZE THE SALE (CALCULATE TOTAL) ===
-        // ==========================================================
-        /// <summary>
-        /// Calculates the final total for a Sale and updates the master record.
-        /// </summary>
+
+        // Calculates the final total for a Sale and updates the master record.
+
         public ServiceResponse FinalizeSale(int saleId)
         {
             var sale = _context.Sales
@@ -162,10 +148,7 @@ namespace SalesSystem.Services
         }
 
 
-        // ==========================================================
-        // === "READ" METHODS (Unchanged, they're still perfect) ===
-        // ==========================================================
-
+ 
         public List<SaleListViewModel> GetAllSales()
         {
             var sales = _context.Sales
@@ -193,7 +176,7 @@ namespace SalesSystem.Services
 
             if (sale == null)
             {
-                return null; // Controller will handle this
+                return null;
             }
 
             var viewModel = new SaleDetailViewModel
