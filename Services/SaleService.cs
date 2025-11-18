@@ -18,7 +18,7 @@ namespace SalesSystem.Services
             _context = context;
         }
 
-        /// Creates a new "draft" Sale record. 
+        /// Creates a new "draft" Sale record.
         public ServiceResponse<Sale> CreateSaleDraft(int customerId, PaymentMethod paymentMethod)
         {
             //  "ServiceResponse<T>" to return the new Sale object
@@ -50,7 +50,8 @@ namespace SalesSystem.Services
             {
                 Success = true,
                 Message = "Sale draft created successfully.",
-                Data = sale // Return the new Sale so I can get its ID
+                Data = sale // Return the new Sale so I can get its ID from the additem to redirect to it from
+                //the controller
             };
         }
 

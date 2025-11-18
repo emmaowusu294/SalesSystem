@@ -22,22 +22,32 @@ namespace SalesSystem.ViewModels
         [Display(Name = "Total Customers")]
         public int TotalCustomersCount { get; set; }
 
-        [Display(Name = "Customer with most sales")]
-        public int mostCustomerSales { get; set; }
+        //top customer with more sales
+        [Display(Name = "Top Customer - by sales")]
+        public string TopCustomerName { get; set; }
+
+        [Display(Name = "Top Customer Sales")]
+        public int TopCustomerSalesCount { get; set; }
+
+        //top customer by revenue/money
+        [Display(Name = "Top Customer - by revenue")]
+        public string TopCustomerRevName {get; set;}
+
+        [Display(Name = "Top Customer Revenue")]
+        public decimal TopCustomerRevenue { get; set; }
+
 
         [Display(Name = "Total Products")]
         public int TotalProductsCount { get; set; }
 
         // --- 2. The "Recent Activity" List ---
-
         // We can re-use the ViewModel we already built for the Sales/Index page!
         public List<SaleListViewModel> RecentSales { get; set; } = new List<SaleListViewModel>();
 
-        // --- 3. Data for Charts (Future) ---
 
-        // We'll leave this empty for now, but you could add
-        // properties here to hold chart data.
-        // public List<SomeChartData> SalesOverTime { get; set; }``                     
+
+        // --- 3. Data for Charts ---
+        public List<SalesOverTimeData> SalesOverTime { get; set; }
 
     }
 }

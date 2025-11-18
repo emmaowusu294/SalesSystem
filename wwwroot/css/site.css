@@ -1,31 +1,281 @@
+/* ---------------------------
+   Base / Typography
+----------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    overflow-x: hidden;
+    background-color: #f8f9fc;
+    color: #3a3b3d;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* ---------------------------
+   Small form placeholder tweaks
+----------------------------- */
+.form-floating > .form-control::placeholder,
+.form-floating > .form-control-plaintext::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.form-floating > .form-control:focus::placeholder,
+.form-floating > .form-control-plaintext:focus::placeholder {
+    text-align: start;
+}
+
+/* ---------------------------
+   Dashboard background helper (optional)
+----------------------------- */
+.dashboard-bg {
+    background-image: url('https://www.marketresearchintellect.com/images/blogs/unleashing-the-power-of-data-the-analytics-market-s-evolution-in-internet-and-communication-technology.webp');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    position: relative;
+}
+
+    .dashboard-bg .overlay {
+        padding: 20px;
+        min-height: 100vh;
+        background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.25));
+        color: #fff;
+        position: relative;
+        z-index: 1;
+    }
+
+/* ---------------------------
+   Cards
+----------------------------- */
+.my-card {
+    background-color: #fff;
+    border: 1px solid #e3e6f0;
+    border-radius: .35rem;
+    box-shadow: 0 .15rem 1.75rem rgba(58,59,69,.08);
+    transition: all 0.25s ease;
+}
+
+    .my-card:hover {
+        transform: translateY(-4px);
+    }
+
+/* ============================================
+   SB Admin–Style Sidebar (Modern Bootstrap)
+   Clean, Fixed, Optimized & Fully Collapsible
+============================================ */
+
+/* SIDEBAR BASE */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    transition: width .28s ease, transform .28s ease;
+    overflow-x: hidden;
+}
+
+/* GRADIENT BACKGROUND */
+.sidebar-gradient {
+    background: linear-gradient(180deg, #4e73df 0%, #224abe 100%);
+    color: #fff;
+}
+
+/* BRAND AREA */
+.sidebar-brand {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+    .sidebar-brand i {
+        font-size: 1.3rem;
+    }
+
+    .sidebar-brand .brand-text {
+        font-weight: 700;
+        font-size: 1.05rem;
+    }
+
+/* DIVIDER */
+.sidebar-divider {
+    border-top: 1px solid rgba(255,255,255,0.25);
+    margin: .6rem 0;
+}
+
+/* NAV AREA */
+.sidebar-nav {
+    padding-left: 0;
+    margin: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+    .sidebar-nav .nav-item {
+        list-style: none;
+    }
+
+    .sidebar-nav .nav-link {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+        color: rgba(255,255,255,0.9);
+        text-decoration: none;
+        font-size: .95rem;
+        border-left: 4px solid transparent;
+        transition: background .15s ease, padding .15s ease, border-left .15s ease;
+    }
+
+        .sidebar-nav .nav-link i {
+            width: 24px;
+            text-align: center;
+        }
+
+        /* HOVER */
+        .sidebar-nav .nav-link:hover {
+            background: rgba(255,255,255,0.08);
+            padding-left: 1.25rem;
+        }
+
+        /* ACTIVE ITEM */
+        .sidebar-nav .nav-link.active {
+            background: rgba(0,0,0,0.15);
+            border-left-color: rgba(255,255,255,0.4);
+            font-weight: 600;
+        }
+
+/* TOGGLER BUTTON */
+#sidebarToggle {
+    background: rgba(255,255,255,0.10);
+    border: none;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* ============================================
+   COLLAPSED MODE (Desktop)
+============================================ */
+
+.sidebar.collapsed {
+    width: 72px !important;
+}
+
+    /* CENTER ICONS & SHRINK LINKS */
+    .sidebar.collapsed .nav-link {
+        justify-content: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+        /* HIDE TEXT LABELS */
+        .sidebar.collapsed .nav-link span {
+            display: none !important;
+        }
+
+        /* CENTER ICON PERFECTLY */
+        .sidebar.collapsed .nav-link i {
+            display: block !important;
+            margin: 0 auto !important;
+            text-align: center !important;
+        }
+
+    /* HIDE BRAND TEXT */
+    .sidebar.collapsed .brand-text {
+        display: none !important;
+    }
+
+    /* CENTER HEADINGS */
+    .sidebar.collapsed .sidebar-heading {
+        text-align: center !important;
+        padding-left: 0 !important;
+    }
+
+/* ============================================
+   CONTENT AREA
+============================================ */
+
+.content-area {
+    margin-left: 250px;
+    padding: 22px;
+    transition: margin-left .28s ease;
+}
+
+    .content-area.expanded {
+        margin-left: 72px;
+    }
+
+/* ============================================
+   MOBILE RESPONSIVE
+============================================ */
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+    }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+    .content-area {
+        margin-left: 0 !important;
+        padding: 16px;
+    }
+
+    #sidebarToggle {
+        position: fixed;
+        top: 12px;
+        left: 14px;
+        z-index: 1060;
+    }
+}
+
+
+
+
+/* small UI helpers */
+.kpi-icon {
+    opacity: .15;
+    position: absolute;
+    right: 16px;
+    bottom: 12px;
+    font-size: 36px;
+}
+
+.table-hover tbody tr:hover {
+    background: #f6f9fc;
+}
+
+a.nav-link {
+    cursor: pointer;
+}
+
+/* accessibility focus */
+.nav-link:focus {
+    outline: 3px solid rgba(255,255,255,0.12);
+    outline-offset: 2px;
+    border-radius: 6px;
 }

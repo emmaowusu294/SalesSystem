@@ -1,55 +1,185 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SalesSystem</title>
-    <script type="importmap"></script>
+
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
+    <!-- Custom -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SalesSystem.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 <body class="bg-light">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SalesSystem</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customers</a>
-                        </li>
-                    </ul>
-                </div>
+
+    <!-- SIDEBAR (SB Admin—style blue gradient) -->
+    <nav id="sidebar" class="sidebar sidebar-gradient" aria-label="Main sidebar">
+        <div class="sidebar-brand d-flex align-items-center justify-content-center py-3">
+            <div class="me-2 rotate-n-15">
+                <i class="fas fa-chart-line fa-lg text-white"></i>
             </div>
-        </nav>
-    </header>
-    <div class="container">
+            <div class="brand-text text-white fw-bold">SalesSystem</div>
+        </div>
+
+        <hr class="sidebar-divider my-0" />
+
+        <ul class="nav flex-column sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link @((ViewContext.RouteData.Values["controller"]?.ToString() ?? "") == "Dashboard" ? "active" : "")"
+                   asp-controller="Dashboard" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading text-white px-3">Management</div>
+
+            <li class="nav-item">
+                <a class="nav-link @((ViewContext.RouteData.Values["controller"]?.ToString() ?? "") == "Sales" ? "active" : "")"
+                   asp-controller="Sales" asp-action="Index">
+                    <i class="fas fa-fw fa-receipt"></i>
+                    <span>Sales</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @((ViewContext.RouteData.Values["controller"]?.ToString() ?? "") == "Customer" ? "active" : "")"
+                   asp-controller="Customer" asp-action="Index">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Customers</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @((ViewContext.RouteData.Values["controller"]?.ToString() ?? "") == "Product" ? "active" : "")"
+                   asp-controller="Product" asp-action="Index">
+                    <i class="fas fa-fw fa-box"></i>
+                    <span>Products</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading text-white px-3">Reports</div>
+
+            @* <li class="nav-item">
+                <a class="nav-link" asp-controller="Reports" asp-action="Charts">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Charts</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Reports" asp-action="Tables">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tables</span>
+                </a>
+            </li> *@
+
+             <li class="nav-item">
+                <a class="nav-link">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Charts</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tables</span>
+                </a>
+            </li> 
+
+            <hr class="sidebar-divider d-none d-md-block">
+
+            @* <li class="nav-item mt-auto d-none d-md-block px-3">
+                <button id="sidebarToggle" class="btn btn-light w-100  border-0" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </li> *@
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div id="content" class="content-area">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+
+        <footer class="border-top footer text-muted mt-4">
+            <div class="container">
+                &copy; 2025 - SalesSystem — <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SalesSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <!-- SCRIPTS -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Initialize AOS
+        if (window.AOS) AOS.init({ duration: 450, once: true });
+
+        (function () {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const toggle = document.getElementById('sidebarToggle');
+
+            // Toggle collapsed desktop state
+            function toggleSidebar() {
+                sidebar.classList.toggle('collapsed');
+                content.classList.toggle('expanded');
+            }
+
+            // wire toggle
+            if (toggle) {
+                toggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    toggleSidebar();
+                });
+            }
+
+            // mobile: close sidebar when clicking outside
+            document.addEventListener('click', function (e) {
+                const target = e.target;
+                const isClickInside = sidebar.contains(target) || (toggle && toggle.contains(target));
+                if (window.innerWidth <= 768 && !isClickInside) {
+                    sidebar.classList.remove('open');
+                }
+            });
+
+            // mobile: swipe to open (optional small helper)
+            let touchStartX = 0;
+            document.addEventListener('touchstart', function (e) {
+                touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+
+            document.addEventListener('touchend', function (e) {
+                const endX = e.changedTouches[0].clientX;
+                if (touchStartX < 50 && endX > 120) {
+                    sidebar.classList.add('open'); // open on swipe from left edge
+                }
+            });
+        })();
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -6,132 +6,213 @@
 }
 
 <div class="container-fluid">
-    <h1 class="h2">Dashboard</h1>
-    <p>Your "at-a-glance" control room for the sales system.</p>
 
-    <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
+    <!-- HEADER -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Dashboard</h1>
+        <p class="text-muted">Your smart overview of the entire sales system.</p>
+        <img src="~/images/dashboard.svg" alt="Dashboard Graphic" height="240" class="img-fluid" />
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="row g-4">
+
+        <!-- Total Revenue -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow border-start-primary h-100 kpi-card" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                @Html.DisplayNameFor(model => model.TotalRevenue)
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                @Html.DisplayFor(model => model.TotalRevenue)
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+                    <h6 class="text-primary text-uppercase small">@Html.DisplayNameFor(m => m.TotalRevenue)</h6>
+                    <h3 class="fw-bold">@Model.TotalRevenue.ToString("C")</h3>
+                    <i class="fas fa-money-bill-wave fa-2x text-gray-300 kpi-icon"></i>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
+        <!-- Total Sales -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow border-start-success h-100 kpi-card">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                @Html.DisplayNameFor(model => model.TotalSalesCount)
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                @Html.DisplayFor(model => model.TotalSalesCount)
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-receipt fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+                    <h6 class="text-success text-uppercase small">@Html.DisplayNameFor(m => m.TotalSalesCount)</h6>
+                    <h3 class="fw-bold">@Model.TotalSalesCount</h3>
+                    <i class="fas fa-shopping-cart fa-2x text-gray-300 kpi-icon"></i>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
+        <!-- Total Customers -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow border-start-info h-100 kpi-card">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                @Html.DisplayNameFor(model => model.TotalCustomersCount)
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                @Html.DisplayFor(model => model.TotalCustomersCount)
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-users fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+                    <h6 class="text-info text-uppercase small">@Html.DisplayNameFor(m => m.TotalCustomersCount)</h6>
+                    <h3 class="fw-bold">@Model.TotalCustomersCount</h3>
+                    <i class="fas fa-users fa-2x text-gray-300 kpi-icon"></i>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
+        <!-- Total Products -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow border-start-warning h-100 kpi-card">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                @Html.DisplayNameFor(model => model.TotalProductsCount)
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                @Html.DisplayFor(model => model.TotalProductsCount)
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-box fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+                    <h6 class="text-warning text-uppercase small">@Html.DisplayNameFor(m => m.TotalProductsCount)</h6>
+                    <h3 class="fw-bold">@Model.TotalProductsCount</h3>
+                    <i class="fas fa-box fa-2x text-gray-300 kpi-icon"></i>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Recent Sales</h6>
-                </div>
+    <!-- TOP CUSTOMERS -->
+    <div class="row g-4 mt-4">
+
+        <!-- Top Customer by Sales -->
+        <div class="col-md-6">
+            <div class="card shadow border-start-dark h-100">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Sale ID</th>
-                                    <th>Date</th>
-                                    <th>Customer</th>
-                                    <th>Payment</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.RecentSales)
-                                {
-                                    <tr>
-                                        <td>#@item.SaleId</td>
-                                        <td>@item.SaleDate.ToString("g")</td>
-                                        <td>@item.CustomerName</td>
-                                        <td>@item.PaymentMethod</td>
-                                        <td>@item.TotalAmount.ToString("C")</td>
-                                        <td>
-                                            <a asp-controller="Sales" asp-action="Details" asp-route-id="@item.SaleId" class="btn btn-info btn-sm">
-                                                View Receipt
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                    <h6 class="text-primary text-uppercase small">@Html.DisplayNameFor(m => m.TopCustomerName) 🏆</h6>
+                    <h4 class="fw-bold">
+                        @Model.TopCustomerName
+                        <span class="text-muted">— @Model.TopCustomerSalesCount sales</span>
+                    </h4>
+                    <i class="fas fa-award fa-2x text-gray-300 kpi-icon"></i>
                 </div>
             </div>
+        </div>
+
+        <!-- Top Customer by Revenue -->
+        <div class="col-md-6">
+            <div class="card shadow border-start-success h-100">
+                <div class="card-body">
+                    <h6 class="text-warning text-uppercase small">@Html.DisplayNameFor(m => m.TopCustomerRevName) 🏆</h6>
+                    <h4 class="fw-bold">
+                        @Model.TopCustomerRevName
+                        <span class="text-muted">— @Model.TopCustomerRevenue.ToString("C")</span>
+                    </h4>
+                    <i class="fas fa-trophy fa-2x text-gray-300 kpi-icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SALES OVER TIME CHART -->
+    <div class="card shadow mt-5">
+        <div class="card-header">
+            <h6 class="fw-bold text-primary m-0">Sales Over Time</h6>
+        </div>
+        <div class="card-body">
+            <canvas id="salesChart" height="120"></canvas>
+        </div>
+    </div>
+
+    <!-- RECENT SALES TABLE -->
+    <div class="card shadow mt-4 mb-5">
+        <div class="card-header">
+            <h6 class="fw-bold text-primary m-0">Recent Sales</h6>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sale ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Payment</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sale in Model.RecentSales)
+                    {
+                        <tr>
+                            <td>#@sale.SaleId</td>
+                            <td>@sale.SaleDate.ToString("g")</td>
+                            <td>@sale.CustomerName</td>
+                            <td>@sale.PaymentMethod</td>
+                            <td>@sale.TotalAmount.ToString("C")</td>
+                            <td>
+                                <a asp-controller="Sales" asp-action="Details" asp-route-id="@sale.SaleId"
+                                   class="btn btn-info btn-sm">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 
 </div>
+
+<!-- TOTAL REVENUE MODAL -->
+<div class="modal fade" id="exampleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow">
+            <div class="modal-header">
+                <h5 class="modal-title">Total Revenue</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h3 class="fw-bold text-center">@Model.TotalRevenue.ToString("C")</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <!-- Chart.js Script -->
+    <script>
+        var labels = @Html.Raw(Json.Serialize(Model.SalesOverTime.Select(x => x.Date.ToShortDateString())));
+        var data = @Html.Raw(Json.Serialize(Model.SalesOverTime.Select(x => x.TotalSales)));
+
+        new Chart(document.getElementById("salesChart"), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Sales Over Time",
+                    data: data,
+                    tension: 0.4,
+                    borderWidth: 3
+                }]
+            }
+        });
+    </script>
+
+    <style>
+        .kpi-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-icon {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            opacity: 0.2; 
+        }
+
+        .border-start-primary {
+            border-left: 5px solid #4e73df !important;
+        }
+
+        .border-start-success {
+            border-left: 5px solid #1cc88a !important;
+        }
+
+        .border-start-info {
+            border-left: 5px solid #36b9cc !important;
+        }
+
+        .border-start-warning {
+            border-left: 5px solid #f6c23e !important;
+        }
+
+        .border-start-dark {
+            border-left: 5px solid #5a5c69 !important;
+        }
+    </style>
+
+}
