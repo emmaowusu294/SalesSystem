@@ -48,6 +48,7 @@
             <div class="sidebar-heading text-white px-3">Management</div>
 
             <li class="nav-item">
+
                 <a class="nav-link @((ViewContext.RouteData.Values["controller"]?.ToString() ?? "") == "Sales" ? "active" : "")"
                    asp-controller="Sales" asp-action="Index">
                     <i class="fas fa-fw fa-receipt"></i>
