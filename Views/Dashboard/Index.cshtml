@@ -104,8 +104,35 @@
         </div>
     </div>
 
+    <div class= "row g-4">
+        @* Top Products  *@
+        <div class="col-lg-6">
+            <div class="card shadow mt-5">
+                <div class="card-header">
+                    <h6 class="fw-bold text-primary text-center m-0">Top Products Per Quantity Sold</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="topProductsChart" height="90"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Momo or Cash -->
+        <div class="col-lg-6">
+            <div class="card shadow mt-5">
+                <div class="card-header">
+                    <h6 class="fw-bold text-primary text-center m-0">Payment Methods</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="paymentChart" height="90"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
     <!-- RECENT SALES TABLE -->
-    <div class="card shadow mt-4 mb-5">
+    @* <div class="card shadow mt-4 mb-5">
         <div class="card-header">
             <h6 class="fw-bold text-primary m-0">Recent Sales</h6>
         </div>
@@ -141,7 +168,9 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> *@
+
+
 
 </div>
 
@@ -177,6 +206,53 @@
                     tension: 0.4,
                     borderWidth: 3
                 }]
+            }
+        });
+
+
+        // payment graph script 
+             const numOfMobileMoney = @Model.numOfMobileMoney;
+        const numOfCash = @Model.numOfCash;
+
+        const ctx = document.getElementById('paymentChart');
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Mobile Money', 'Cash'],
+                datasets: [{
+                    data: [numOfMobileMoney, numOfCash],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        //script for top products
+         const topProdLabels = @Html.Raw(Json.Serialize(Model.TopProductNames));
+        const topProdData = @Html.Raw(Json.Serialize(Model.TopProductQuantities));
+
+        new Chart(document.getElementById("topProductsChart"), {
+            type: 'doughnut',
+            data: {
+                labels: topProdLabels,
+                datasets: [{
+                    data: topProdData,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
             }
         });
     </script>

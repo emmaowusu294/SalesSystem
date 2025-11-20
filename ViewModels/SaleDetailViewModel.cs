@@ -10,6 +10,7 @@ namespace SalesSystem.ViewModels
     /// </summary>
     public class SaleItemDetailViewModel
     {
+        public int SaleItemId { get; set; }
         public string ProductName { get; set; }
         public int Quantity { get; set; }
 

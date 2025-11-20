@@ -40,6 +40,16 @@ namespace SalesSystem.ViewModels
         [Display(Name = "Total Products")]
         public int TotalProductsCount { get; set; }
 
+        //momo or cash
+        public int numOfMobileMoney { get; set;}
+        public int numOfCash { get; set; }
+
+
+        // --- Top Products Chart ---
+        public List<string> TopProductNames { get; set; } = new List<string>();
+        public List<int> TopProductQuantities { get; set; } = new List<int>();
+
+
         // --- 2. The "Recent Activity" List ---
         // We can re-use the ViewModel we already built for the Sales/Index page!
         public List<SaleListViewModel> RecentSales { get; set; } = new List<SaleListViewModel>();

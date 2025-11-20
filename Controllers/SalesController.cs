@@ -142,6 +142,37 @@ namespace SalesSystem.Controllers
         }
 
 
+        // This is a new action that the "Delete Item" form will post to
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        // 1. Change parameter name to match your form input name="saleItemId"
+        public ActionResult DeleteItem(int saleItemId)
+        {
+
+            var response = _saleService.DeleteItemFromSale(saleItemId);
+
+            if (response.Success)
+            {
+                TempData["Message"] = response.Message;
+                TempData["Success"] = true;
+
+                // 2. USE THE RETURNED SALE ID FOR THE REDIRECT
+                // We use response.Data, which holds the correct SaleId (e.g., 10)
+                return RedirectToAction(nameof(Details), new { id = response.Data });
+            }
+            else
+            {
+                // If deletion failed, we might be lost. 
+                // Redirecting to Index is the safest fallback.
+                TempData["Message"] = response.Message;
+                TempData["Success"] = false;
+                return RedirectToAction(nameof(Index));
+            }
+        
+
+        }
+
+
         // This is a new action for the "Finalize" button
         [HttpPost]
         [ValidateAntiForgeryToken]

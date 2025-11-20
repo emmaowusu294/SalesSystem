@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SalesSystem.Data;
+using SalesSystem.Models;
 using SalesSystem.Services; 
 using SalesSystem.ViewModels; 
 using System.Linq; 
@@ -58,7 +59,28 @@ namespace SalesSystem.Controllers
                    .FirstOrDefault(c => c.CustomerId == topCustomerRev.CustomerId)?.Name
                : "N/A";
 
+            //logic for top products 
+            // 1. Group products by sales quantity
+            var productSales = _context.SaleItems
+                .GroupBy(s => s.Product.Name)
+                .Select(g => new
+                {
+                    ProductName = g.Key,
+                    TotalQty = g.Sum(x => x.Quantity)
+                })
+                .OrderByDescending(x => x.TotalQty)
+                .ToList();
 
+            // 2. Get Top 5
+            var top5 = productSales.Take(5).ToList();
+
+            // 3. Sum everything else as "Others"
+            var othersSum = productSales.Skip(5).Sum(x => x.TotalQty);
+
+            if (othersSum > 0)
+            {
+                top5.Add(new { ProductName = "Others", TotalQty = othersSum });
+            }
 
 
             var viewModel = new DashboardViewModel
@@ -79,6 +101,16 @@ namespace SalesSystem.Controllers
                 RecentSales = allSales.OrderByDescending(s => s.SaleDate)
                                       .Take(5)
                                       .ToList(),
+
+                //momo or cash
+                numOfMobileMoney = allSales.Count(a => a.PaymentMethod == PaymentMethod.MobileMoney),
+
+                numOfCash = allSales.Count(a => a.PaymentMethod == PaymentMethod.Cash),
+
+                TopProductNames = top5.Select(x => x.ProductName).ToList(),
+
+                TopProductQuantities = top5.Select(x => x.TotalQty).ToList(),
+
 
 
                 //for graph

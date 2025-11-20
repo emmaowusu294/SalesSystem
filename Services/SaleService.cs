@@ -68,6 +68,9 @@ namespace SalesSystem.Services
                 {
                     var product = _context.Products.Find(productId);
                     var sale = _context.Sales.Find(saleId);
+                    var sameProduct = _context.SaleItems
+                            .FirstOrDefault(s => s.SaleId == saleId && s.ProductId == productId);
+
 
                     if (product == null)
                     {
@@ -88,16 +91,24 @@ namespace SalesSystem.Services
                         };
                     }
 
-                    // Create the "line item"
-                    var saleItem = new SaleItem
+                    // check if theres a sale item with the same product
+                    if (sameProduct != null)
                     {
-                        SaleId = saleId,
-                        ProductId = productId,
-                        Quantity = quantity,
-                        UnitPrice = product.SellingPrice // This is the "freeze"
-                    };
-                    _context.SaleItems.Add(saleItem);
-
+                        //update that particular saleitem with the product
+                        sameProduct.Quantity += quantity;
+                    }
+                    else
+                    {
+                        // Create the "line item"
+                        var saleItem = new SaleItem
+                        {
+                            SaleId = saleId,
+                            ProductId = productId,
+                            Quantity = quantity,
+                            UnitPrice = product.SellingPrice // This is the "freeze"
+                        };
+                        _context.SaleItems.Add(saleItem);
+                    }
 
 
                     // Update the product's stock
@@ -112,6 +123,53 @@ namespace SalesSystem.Services
                 {
                     transaction.Rollback();
                     return new ServiceResponse { Success = false, Message = $"Failed to add item: {ex.Message}" };
+                }
+            }
+        }
+
+
+        public ServiceResponse<int> DeleteItemFromSale(int saleItemId)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    // 1. Find the item by its ID
+                    var saleItem = _context.SaleItems.Find(saleItemId);
+
+                    if (saleItem == null)
+                    {
+                        return new ServiceResponse<int> { Success = false, Message = "Item not found." };
+                    }
+
+                    int saleId = saleItem.SaleId;
+
+                    // 2. Restore the Stock
+                    var product = _context.Products.Find(saleItem.ProductId);
+                    if (product != null)
+                    {
+                        product.StockQuantity += saleItem.Quantity;
+                    }
+
+                    // 3. Remove the item
+                    _context.SaleItems.Remove(saleItem);
+
+                    _context.SaveChanges();
+                    transaction.Commit();
+
+                    // Return the SaleId so the controller knows where to redirect
+                    // (We have to grab it from the item before we delete it/return)
+                    return new ServiceResponse<int>
+                    {
+                        Success = true,
+                        Message = "Item Removed.",
+                        Data = saleId,
+                    };
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return new ServiceResponse<int> { Success = false, Message = $"Failed: {ex.Message}" };
                 }
             }
         }
@@ -191,6 +249,7 @@ namespace SalesSystem.Services
                 CustomerEmail = sale.Customer.Email,
                 Items = sale.SaleItems.Select(si => new SaleItemDetailViewModel
                 {
+                    SaleItemId = si.SaleItemId,
                     ProductName = si.Product.Name,
                     Quantity = si.Quantity,
                     UnitPrice = si.UnitPrice,
