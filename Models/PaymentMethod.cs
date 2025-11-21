@@ -3,6 +3,7 @@
     public enum PaymentMethod
     {
         Cash,
-        MobileMoney
+        MobileMoney,
+        Card
     }
 }

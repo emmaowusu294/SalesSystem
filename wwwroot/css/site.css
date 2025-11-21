@@ -280,3 +280,8 @@ a.nav-link {
     outline-offset: 2px;
     border-radius: 6px;
 }
+
+
+.card {
+    border: 0px;
+}

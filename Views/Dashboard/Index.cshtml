@@ -9,9 +9,9 @@
 
     <!-- HEADER -->
     <div class="text-center mb-5">
-        <h1 class="fw-bold">Dashboard</h1>
+        <h1 class="fw-bold" style="font-size: 50px;">Dashboard</h1>
         <p class="text-muted">Your smart overview of the entire sales system.</p>
-        <img src="~/images/dashboard.svg" alt="Dashboard Graphic" height="240" class="img-fluid" />
+        @* <img src="~/images/dashboard.svg" alt="Dashboard Graphic" height="240" class="img-fluid" /> *@
     </div>
 
     <!-- KPI CARDS -->
@@ -94,30 +94,37 @@
         </div>
     </div>
 
-    <!-- SALES OVER TIME CHART -->
-    <div class="card shadow mt-5">
-        <div class="card-header">
-            <h6 class="fw-bold text-primary m-0">Sales Over Time</h6>
-        </div>
-        <div class="card-body">
-            <canvas id="salesChart" height="120"></canvas>
-        </div>
-    </div>
 
-    <div class= "row g-4">
-        @* Top Products  *@
-        <div class="col-lg-6">
-            <div class="card shadow mt-5">
+    <div class="row g-4 align-items-stretch">
+        <div class="col-lg-8 d-flex">
+            <!-- SALES OVER TIME CHART -->
+            <div class="card shadow mt-5 w-100">
                 <div class="card-header">
-                    <h6 class="fw-bold text-primary text-center m-0">Top Products Per Quantity Sold</h6>
+                    <h6 class="fw-bold text-primary m-0">Sales Over Time</h6>
                 </div>
                 <div class="card-body">
-                    <canvas id="topProductsChart" height="90"></canvas>
+                    <canvas id="salesChart" height="120"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Momo or Cash -->
+        <div class="col-lg-4 d-flex">
+            <!-- Momo, Cash or Card -->
+            <div class="card shadow mt-5 w-100">
+                <div class="card-header">
+                    <h6 class="fw-bold text-primary text-center m-0">Top Products Per Quantity Sold</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="topProductsChart" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <div class= "row g-4">
+        @* Top Products  *@
         <div class="col-lg-6">
             <div class="card shadow mt-5">
                 <div class="card-header">
@@ -213,15 +220,16 @@
         // payment graph script 
              const numOfMobileMoney = @Model.numOfMobileMoney;
         const numOfCash = @Model.numOfCash;
+        const numOfCard = @Model.numOfCard;
 
         const ctx = document.getElementById('paymentChart');
 
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Mobile Money', 'Cash'],
+                labels: ['Mobile Money', 'Cash', 'Card'],
                 datasets: [{
-                    data: [numOfMobileMoney, numOfCash],
+                    data: [numOfMobileMoney, numOfCash , numOfCard],
                     borderWidth: 1
                 }]
             },

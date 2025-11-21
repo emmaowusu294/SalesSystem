@@ -40,9 +40,10 @@ namespace SalesSystem.ViewModels
         [Display(Name = "Total Products")]
         public int TotalProductsCount { get; set; }
 
-        //momo or cash
+        //momo or cash OR Card
         public int numOfMobileMoney { get; set;}
         public int numOfCash { get; set; }
+        public int numOfCard { get; set; }
 
 
         // --- Top Products Chart ---

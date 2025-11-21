@@ -107,6 +107,8 @@ namespace SalesSystem.Controllers
 
                 numOfCash = allSales.Count(a => a.PaymentMethod == PaymentMethod.Cash),
 
+                numOfCard = allSales.Count(a => a.PaymentMethod == PaymentMethod.Card),
+
                 TopProductNames = top5.Select(x => x.ProductName).ToList(),
 
                 TopProductQuantities = top5.Select(x => x.TotalQty).ToList(),
