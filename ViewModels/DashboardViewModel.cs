@@ -24,14 +24,14 @@ namespace SalesSystem.ViewModels
 
         //top customer with more sales
         [Display(Name = "Top Customer - by sales")]
-        public string TopCustomerName { get; set; }
+        public string? TopCustomerName { get; set; }
 
         [Display(Name = "Top Customer Sales")]
         public int TopCustomerSalesCount { get; set; }
 
         //top customer by revenue/money
         [Display(Name = "Top Customer - by revenue")]
-        public string TopCustomerRevName {get; set;}
+        public string? TopCustomerRevName {get; set;}
 
         [Display(Name = "Top Customer Revenue")]
         public decimal TopCustomerRevenue { get; set; }
@@ -46,6 +46,23 @@ namespace SalesSystem.ViewModels
         public int numOfCard { get; set; }
 
 
+
+        // Today stats
+        [Display(Name = "Today's Revenue")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        public decimal TodayRevenue { get; set; }
+
+        [Display(Name = "Today's Sales Count")]
+        public int TodaySalesCount { get; set; }
+
+        [Display(Name = "Today's Top Product")]
+        public string TodayTopProduct { get; set; }
+
+        [Display(Name = "Today's Top Payment Method")]
+        public string TodayTopPaymentMethod { get; set; }
+
+
+
         // --- Top Products Chart ---
         public List<string> TopProductNames { get; set; } = new List<string>();
         public List<int> TopProductQuantities { get; set; } = new List<int>();
@@ -58,7 +75,7 @@ namespace SalesSystem.ViewModels
 
 
         // --- 3. Data for Charts ---
-        public List<SalesOverTimeData> SalesOverTime { get; set; }
+        public List<SalesOverTimeData>? SalesOverTime { get; set; }
 
     }
 }

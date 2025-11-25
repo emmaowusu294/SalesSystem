@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SalesSystem.Data;
 using SalesSystem.Models;
 using SalesSystem.Services; 
@@ -82,6 +83,47 @@ namespace SalesSystem.Controllers
                 top5.Add(new { ProductName = "Others", TotalQty = othersSum });
             }
 
+            var debugDates = _context.Sales
+                .Select(s => s.SaleDate)
+                .ToList();
+
+            Console.WriteLine(debugDates);
+
+
+            var today = DateTime.Today;
+
+            var todaySales = _context.Sales
+                 .Include(s => s.SaleItems)          
+                    .ThenInclude(si => si.Product)  
+                 .Where(s => s.SaleDate >= today && s.SaleDate < today.AddDays(1))
+                 .ToList();
+
+
+
+            var todayRevenue = todaySales.Sum(s => s.TotalAmount);
+            var todaySalesCount = todaySales.Count();
+
+            string todayTopProduct = "No sales today";
+            string todayTopPayment = "No sales today";
+
+            if (todaySales.Any())
+            {
+                todayTopProduct = todaySales
+                    .SelectMany(s => s.SaleItems)
+                    .GroupBy(si => si.Product.Name)
+                    .OrderByDescending(g => g.Sum(si => si.Quantity))
+                    .Select(g => g.Key)
+                    .FirstOrDefault() ?? "No sales today";
+
+
+                todayTopPayment = todaySales
+                    .GroupBy(s => s.PaymentMethod)
+                    .OrderByDescending(g => g.Count())
+                    .Select(g => g.Key.ToString())
+                    .FirstOrDefault() ?? "No sales today";
+
+            }
+
 
             var viewModel = new DashboardViewModel
             {
@@ -112,6 +154,14 @@ namespace SalesSystem.Controllers
                 TopProductNames = top5.Select(x => x.ProductName).ToList(),
 
                 TopProductQuantities = top5.Select(x => x.TotalQty).ToList(),
+
+                //today's stats
+                TodayRevenue = todayRevenue,
+                TodaySalesCount = todaySalesCount,
+                TodayTopProduct = todayTopProduct,
+                TodayTopPaymentMethod = todayTopPayment,
+
+
 
 
 

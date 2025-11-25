@@ -285,3 +285,37 @@ a.nav-link {
 .card {
     border: 0px;
 }
+
+
+/*accordion */
+
+.accordion {
+    margin-top: 60px;
+}
+
+.accordion-item {
+    margin: 30px 0;
+    background-color: #fff;
+    border: 1px solid #dbdde9 !important;
+    padding: 24px;
+    border-radius: 16px !important;
+}
+/*    .accordion-item:not(:first-of-type) {
+        border: 1px solid #dbdde9;
+    }*/
+.accordion-button{
+    border-top-right-radius: 16px !important;
+    border-top-left-radius: 16px !important;
+}
+    .accordion-button:not(.collapsed) {
+        /*    color: var(--bs-accordion-active-color);*/
+        /*    background-color: ;*/
+
+        background: linear-gradient(180deg, #4e73df 0%, #224abe 100%);
+        color: #fff;
+    }
+
+.accordion-button:not(.collapsed)::after{
+        fill: #fff;
+}
+ 
