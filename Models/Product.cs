@@ -20,6 +20,8 @@ namespace SalesSystem.Models
 
         public int StockQuantity { get; set; }
 
+        public ProductCategory? Category { get; set; }
+
         // A Product can be in many SaleItems
         public virtual ICollection<SaleItem> SaleItems { get; set; } = new List<SaleItem>();
     }

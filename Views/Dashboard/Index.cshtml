@@ -18,7 +18,7 @@
     <div class="row g-4">
 
         <!-- Total Revenue -->
-        <div class="col-xl-3 col-md-6">
+        <div class="col-md-6">
             <div class="card shadow border-start-primary h-100 kpi-card" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <div class="card-body">
                     <h6 class="text-primary text-uppercase small">@Html.DisplayNameFor(m => m.TotalRevenue)</h6>
@@ -28,8 +28,22 @@
             </div>
         </div>
 
+        <div class="col-md-6">
+            <div class="card shadow border-start-dark h-100 kpi-card" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <div class="card-body">
+                    <h6 class="text-primary text-uppercase small">Average Revenue (Per Sale)</h6>
+                    <h3 class="fw-bold">
+                        @* @Model.TotalRevenue.ToString("C") *@
+                        @(Model.TotalRevenue > 0
+                                                ? Math.Round((Model.TotalRevenue / Model.TotalSalesCount), 2).ToString("C")
+                                                : 0)
+                    </h3>
+                    <i class="fas fa-money-bill-wave fa-2x text-gray-300 kpi-icon"></i>
+                </div>
+            </div>
+        </div>
         <!-- Total Sales -->
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card shadow border-start-success h-100 kpi-card">
                 <div class="card-body">
                     <h6 class="text-success text-uppercase small">@Html.DisplayNameFor(m => m.TotalSalesCount)</h6>
@@ -40,7 +54,7 @@
         </div>
 
         <!-- Total Customers -->
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card shadow border-start-info h-100 kpi-card">
                 <div class="card-body">
                     <h6 class="text-info text-uppercase small">@Html.DisplayNameFor(m => m.TotalCustomersCount)</h6>
@@ -51,7 +65,7 @@
         </div>
 
         <!-- Total Products -->
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card shadow border-start-warning h-100 kpi-card">
                 <div class="card-body">
                     <h6 class="text-warning text-uppercase small">@Html.DisplayNameFor(m => m.TotalProductsCount)</h6>
@@ -144,36 +158,39 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#today-stats" aria-expanded="true" aria-controls="today-stats">
-                    📅 Today’s Stats
+                    📅 Today’s Stats -   @DateTime.Today.DayOfWeek @DateTime.Today.ToShortDateString()
                 </button>
             </h2>
 
             <div id="today-stats" class="accordion-collapse collapse show">
                 <div class="accordion-body">
 
-                    <div class="row text-center justify-content-center align-items-center h-100">
+                    <div class="row text-center justify-content-center h-100">
 
-                        <div class="col-md-3 mb-3">
+                        <div class="col-6 col-lg-3 mb-3">
                             <h6 class="fw-bold text-primary">Revenue</h6>
-                            <p class="fs-5 fw-semibold">GH₵ @Model.TodayRevenue</p>
+                            <p class="fs-5 fw-semibold">@Model.TodayRevenue.ToString("C")</p>
                         </div>
 
-                        <div class="col-md-3 mb-3">
+                        <div class="col-6 col-lg-3 mb-3">
                             <h6 class="fw-bold text-primary">Sales</h6>
                             <p class="fs-5 fw-semibold">@Model.TodaySalesCount</p>
                         </div>
 
-                        <div class="col-md-3 mb-3">
+                        <div class="col-6 col-lg-3 mb-3">
                             <h6 class="fw-bold text-primary">Most Sold Product</h6>
-                            <p class="fs-5 fw-semibold">
+                            <p class="fs-5 fw-semibold m-0">
                                 @(Model.TodayTopProduct ?? "No sales today")
+                                <p class="m-0 text-muted">(@Model.TodayTopProductQuantity sold)</p>
                             </p>
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <h6 class="fw-bold text-primary">Top Payment Method</h6>
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Average Sale Value</h6>
                             <p class="fs-5 fw-semibold">
-                                @(Model.TodayTopPaymentMethod ?? "N/A")
+                                @(Model.TodaySalesCount > 0
+                                    ? Math.Round((Model.TodayRevenue / Model.TodaySalesCount), 2).ToString("C")
+                                    : 0)
                             </p>
                         </div>
 
@@ -183,28 +200,91 @@
             </div>
         </div>
 
+        @* Weekly stat  *@
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-            Accordion Item #2
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    📅 This Week’s Stats - @Model.WeekRange
           </button>
         </h2>
-        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <strong>This is the second item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-          </div>
-        </div>
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                <div class="accordion-body">
+
+                    <div class="row text-center justify-content-center h-100">
+
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Revenue</h6>
+                            <p class="fs-5 fw-semibold">@Model.WeekRevenue.ToString("C")</p>
+                        </div>
+
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Sales</h6>
+                            <p class="fs-5 fw-semibold">@Model.WeekSalesCount</p>
+                        </div>
+
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Most Sold Product</h6>
+                            <p class="fs-5 fw-semibold m-0">
+                                @(Model.TodayTopProduct ?? "No sales today")
+                                <p class="m-0 text-muted">(@Model.WeekTopProductQuantity sold)</p>
+                            </p>
+                        </div>
+
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Average Sale Value</h6>
+                            <p class="fs-5 fw-semibold">
+                                @(Model.WeekSalesCount > 0
+                                    ? Math.Round((Model.WeekRevenue / Model.WeekSalesCount), 2).ToString("C")
+                                    : 0)
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
       </div>
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-            Accordion Item #3
+                    📅 This Month’s Stats - @DateTime.Today.ToString("MMMM")
           </button>
         </h2>
         <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-          <div class="accordion-body">
-            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-          </div>
+                <div class="accordion-body">
+
+                    <div class="row text-center justify-content-center h-100">
+
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Revenue</h6>
+                            <p class="fs-5 fw-semibold">@Model.MonthRevenue.ToString("C")</p>
+                        </div>
+
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Sales</h6>
+                            <p class="fs-5 fw-semibold">@Model.MonthSalesCount</p>
+                        </div>
+
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Most Sold Product</h6>
+                            <p class="fs-5 fw-semibold m-0">
+                                @(Model.TodayTopProduct ?? "No sales today")
+                            <p class="m-0 text-muted">(@Model.MonthTopProductQuantity sold)</p>
+                            </p>
+                        </div>
+
+                        <div class="col-6 col-lg-3 mb-3">
+                            <h6 class="fw-bold text-primary">Average Sale Value</h6>
+                            <p class="fs-5 fw-semibold">
+                                @(Model.MonthSalesCount > 0
+                                        ? Math.Round((Model.MonthRevenue / Model.MonthSalesCount), 2).ToString("C")
+                                        : 0)
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
         </div>
       </div>
    </div>

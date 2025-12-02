@@ -26,11 +26,10 @@ namespace SalesSystem.Controllers
             _context = context;
         }
 
-        // --- 2. The Index() action is its one and only job ---
-        // This will run when the user goes to /Dashboard
+
         public IActionResult Index()
         {
-            // --- Getting the raw data from the services ---
+
             var allSales = _saleService.GetAllSales();
             var allCustomers = _customerService.GetAllCustomers();
             var allProducts = _productService.GetAllProducts();
@@ -83,11 +82,7 @@ namespace SalesSystem.Controllers
                 top5.Add(new { ProductName = "Others", TotalQty = othersSum });
             }
 
-            var debugDates = _context.Sales
-                .Select(s => s.SaleDate)
-                .ToList();
 
-            Console.WriteLine(debugDates);
 
 
             var today = DateTime.Today;
@@ -99,31 +94,84 @@ namespace SalesSystem.Controllers
                  .ToList();
 
 
-
+            //today's stats
             var todayRevenue = todaySales.Sum(s => s.TotalAmount);
             var todaySalesCount = todaySales.Count();
 
-            string todayTopProduct = "No sales today";
-            string todayTopPayment = "No sales today";
 
-            if (todaySales.Any())
+            var todayTopProduct = todaySales
+                .SelectMany(s => s.SaleItems)
+                .GroupBy(si => si.Product)
+                .Select(g => new
+                {
+                    ProductName = g.Key.Name,
+                    TotalQty = g.Sum(x => x.Quantity)
+                })
+                .OrderByDescending(x => x.TotalQty)
+                .FirstOrDefault();
+
+
+            //weekly stats--------------------------///
+            // weekly range logic
+            //calculating how many days to subtract to get back to Monday
+            int daysDifference = (int)today.DayOfWeek - (int)DayOfWeek.Monday;
+
+            // If today is Sunday (daysDifference would be -1), adjust to go back a full week
+            if (daysDifference < 0)
             {
-                todayTopProduct = todaySales
-                    .SelectMany(s => s.SaleItems)
-                    .GroupBy(si => si.Product.Name)
-                    .OrderByDescending(g => g.Sum(si => si.Quantity))
-                    .Select(g => g.Key)
-                    .FirstOrDefault() ?? "No sales today";
-
-
-                todayTopPayment = todaySales
-                    .GroupBy(s => s.PaymentMethod)
-                    .OrderByDescending(g => g.Count())
-                    .Select(g => g.Key.ToString())
-                    .FirstOrDefault() ?? "No sales today";
-
+                daysDifference += 7;
             }
 
+
+            DateTime mondayDate = today.AddDays(-daysDifference);
+            DateTime saturdayDate = mondayDate.AddDays(5); // 5 days after Monday is Saturday
+            // Format the dates as strings (dd/MM/yyyy )
+            string mondayFormatted = mondayDate.ToString("dd/MM/yyyy");
+            string saturdayFormatted = saturdayDate.ToString("dd/MM/yyyy");
+
+            //main weekly stats
+            var weeklySales = _context.Sales
+                 .Include(s => s.SaleItems)
+                    .ThenInclude(si => si.Product)
+                 .Where(s => s.SaleDate >= mondayDate && s.SaleDate < saturdayDate)
+                 .ToList();
+
+            var weekRevenue = weeklySales.Sum(w => w.TotalAmount);
+            var weekSalesCount = weeklySales.Count();
+
+            var weekTopProduct = weeklySales
+                .SelectMany(w => w.SaleItems)
+                .GroupBy(s => s.Product)
+                .Select(g => new
+                {
+                    ProductName = g.Key.Name,
+                    TotalQty = g.Sum(x => x.Quantity)
+                })
+                .OrderByDescending(x => x.TotalQty)
+                .FirstOrDefault();
+
+
+            //monthly stats
+            var currentMonth = today.Month;
+            Console.WriteLine($"Current Month: {currentMonth}");
+
+            var monthlySales = _context.Sales
+                .Include(s => s.SaleItems)
+                    .ThenInclude(si => si.Product)
+                .Where(s => s.SaleDate.Month == currentMonth);
+
+            var monthRevenue = monthlySales.Sum(m => m.TotalAmount);
+            var monthSalesCount = monthlySales.Count();
+
+            var monthTopProduct = monthlySales
+                .SelectMany (s => s.SaleItems)
+                .GroupBy(s => s.Product)
+                .Select(g => new
+                {
+                    ProductName = g.Key.Name,
+                    TotalQty = g.Sum(x => x.Quantity)
+                }).OrderByDescending(x => x.TotalQty)
+                .FirstOrDefault();
 
             var viewModel = new DashboardViewModel
             {
@@ -158,8 +206,25 @@ namespace SalesSystem.Controllers
                 //today's stats
                 TodayRevenue = todayRevenue,
                 TodaySalesCount = todaySalesCount,
-                TodayTopProduct = todayTopProduct,
-                TodayTopPaymentMethod = todayTopPayment,
+                TodayTopProduct = todayTopProduct?.ProductName ?? "No sales today",
+                TodayTopProductQuantity = todayTopProduct?.TotalQty ?? 0,
+
+                //week's stat's
+                WeekRange = $"Monday {mondayFormatted} - Saturday {saturdayFormatted}",
+                WeekSalesCount = weekSalesCount,
+                WeekRevenue = weekRevenue,
+                WeekTopProduct = weekTopProduct?.ProductName ?? "No Sales this week",
+                WeekTopProductQuantity = weekTopProduct?.TotalQty ?? 0,
+
+                //Month's stat's
+                MonthSalesCount = monthSalesCount,
+                MonthRevenue = monthRevenue,
+                MonthTopProduct = monthTopProduct?.ProductName ?? "No Sales this week",
+                MonthTopProductQuantity = monthTopProduct?.TotalQty ?? 0,
+
+
+
+
 
 
 

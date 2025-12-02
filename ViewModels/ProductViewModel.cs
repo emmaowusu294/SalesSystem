@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SalesSystem.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace SalesSystem.ViewModels
 {
@@ -15,5 +16,7 @@ namespace SalesSystem.ViewModels
         public decimal SellingPrice { get; set; }
 
         public int StockQuantity { get; set; }
+
+        public ProductCategory? Category { get; set; }
     }
 }

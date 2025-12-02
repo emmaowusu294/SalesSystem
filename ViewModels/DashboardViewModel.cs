@@ -3,17 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SalesSystem.ViewModels
 {
-    /// <summary>
-    /// This is the "wrapper" for your main dashboard (Dashboard/Index).
-    /// The DashboardController will create this object and fill it with stats.
-    /// </summary>
     public class DashboardViewModel
     {
-        // --- 1. The KPI (Key Performance Indicator) Cards ---
-        // These are the "big numbers" at the top of the page.
 
         [Display(Name = "Total Revenue")]
-        [DisplayFormat(DataFormatString = "{0:C}")] // Formats it as currency (e.g., GH₵1,234.50)
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal TotalRevenue { get; set; }
 
         [Display(Name = "Total Sales")]
@@ -40,6 +34,11 @@ namespace SalesSystem.ViewModels
         [Display(Name = "Total Products")]
         public int TotalProductsCount { get; set; }
 
+
+        ////Top category
+        //public string? TopCategoryName { get; set; }
+        //public int? TopCategoryQty { get; set; }
+
         //momo or cash OR Card
         public int numOfMobileMoney { get; set;}
         public int numOfCash { get; set; }
@@ -57,9 +56,23 @@ namespace SalesSystem.ViewModels
 
         [Display(Name = "Today's Top Product")]
         public string TodayTopProduct { get; set; }
+        public int TodayTopProductQuantity { get; set; }
 
-        [Display(Name = "Today's Top Payment Method")]
-        public string TodayTopPaymentMethod { get; set; }
+        // Weekly stats
+        public string WeekRange { get; set; }
+        public decimal WeekRevenue { get; set; }
+        public int WeekSalesCount { get; set; }
+        public string WeekTopProduct { get; set; }
+        public int WeekTopProductQuantity { get; set; }
+
+
+        // Monthly stats
+        //public string MonthRange { get; set; }
+        public decimal MonthRevenue { get; set; }
+        public int MonthSalesCount { get; set; }
+        public string MonthTopProduct { get; set; }
+        public int MonthTopProductQuantity { get; set; }
+
 
 
 

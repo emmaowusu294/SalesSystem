@@ -21,6 +21,7 @@ namespace SalesSystem.Services
         public List<ProductViewModel> GetAllProducts()
         {
             var viewModels = _context.Products
+
                 .Select(s => new ProductViewModel
                 {
                     ProductId = s.ProductId,
@@ -28,7 +29,9 @@ namespace SalesSystem.Services
                     Description = s.Description,
                     SellingPrice = s.SellingPrice,
                     StockQuantity = s.StockQuantity,
+                    Category = s.Category,
                 })
+                .OrderBy(s => s.Name)
                 .ToList();
             return viewModels;
         }
@@ -47,6 +50,7 @@ namespace SalesSystem.Services
                 Description = product.Description,
                 SellingPrice = product.SellingPrice,
                 StockQuantity = product.StockQuantity,
+                Category = product.Category,
             };
             return viewModel;
         }
@@ -61,6 +65,7 @@ namespace SalesSystem.Services
                 Description = viewModel.Description,
                 SellingPrice = viewModel.SellingPrice,
                 StockQuantity = viewModel.StockQuantity,
+                Category = viewModel.Category,
             };
 
             _context.Products.Add(product);
@@ -91,6 +96,7 @@ namespace SalesSystem.Services
             product.Description = viewModel.Description;
             product.SellingPrice = viewModel.SellingPrice;
             product.StockQuantity = viewModel.StockQuantity;
+            product.Category = viewModel.Category;
 
             _context.Products.Update(product);
             _context.SaveChanges();

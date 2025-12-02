@@ -39,6 +39,7 @@ namespace SalesSystem.Controllers
                     Description = "",
                     SellingPrice = 0,
                     StockQuantity = 0,
+                    Category = null,
                 };
                 ViewBag.Message = "Product not found.";
                 ViewBag.Success = false;
@@ -93,6 +94,7 @@ namespace SalesSystem.Controllers
                     Description = "",
                     SellingPrice = 0,
                     StockQuantity = 0,
+                    Category = null,
                 };
                 ViewBag.Message = "Product not found.";
                 ViewBag.Success = false;
@@ -146,6 +148,7 @@ namespace SalesSystem.Controllers
                     Description = "",
                     SellingPrice = 0,
                     StockQuantity = 0,
+                    Category = null,
                 };
                 ViewBag.Message = "Product not found.";
                 ViewBag.Success = false;

@@ -27,6 +27,7 @@ namespace SalesSystem.Services
                     PhoneNumber = s.PhoneNumber,
                     Email = s.Email,
                 })
+                .OrderBy(s => s.Name)
                 .ToList();
 
             return viewModels;
